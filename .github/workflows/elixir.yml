@@ -4,7 +4,7 @@ on:
   push:
     branches: [main]
   pull_request:
-    branches: [main]
+   types: [opened, synchronize]
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -34,7 +34,11 @@ jobs:
             ${{ runner.os }}-build-
             ${{ runner.os }}-
       - name: deps
-        run: mix  deps.get
+        run:
+             mix local.rebar --force
+             mix local.hex --force
+             mix deps.get
+             mix deps.compile
       - name: Lint Code
         run: mix credo --strict
 
@@ -59,7 +63,10 @@ jobs:
             ${{ runner.os }}-build-
             ${{ runner.os }}-
       - name: deps
-        run: mix  deps.get
+        run:  mix local.rebar --force
+             mix local.hex --force
+             mix deps.get
+             mix deps.compile
       - name: FORMAT
         run: mix format --check-formatted
 
@@ -84,7 +91,10 @@ jobs:
             ${{ runner.os }}-build-
             ${{ runner.os }}-
       - name: deps
-        run: mix  deps.get
+        run:  mix local.rebar --force
+             mix local.hex --force
+             mix deps.get
+             mix deps.compile
       - name: Security
         run: mix sobelow --config
 
@@ -124,23 +134,23 @@ jobs:
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
-  deploy:
-    name: Deploy Gigalixir
-    needs: [lint, check_format, security, test]
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-        with:
-          ref: main # Checkout out master instead of the latest commit
-          fetch-depth: 0 # Checkout the whole branch
-      - uses: actions/setup-python@v2
-        with:
-          python-version: 3.8.1
-      - uses: mhanberg/gigalixir-action@v0.6.2
-        with:
-          GIGALIXIR_USERNAME: ${{ secrets.GIGALIXIR_EMAIL }}
-          GIGALIXIR_PASSWORD: ${{ secrets.GIGALIXIR_PASSWORD }}
-          GIGALIXIR_APP: ${{ secrets.GIGALIXIR_APP_NAME }}
-          GIGALIXIR_CLEAN: true
-          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
-          MIGRATIONS: false # defaults to true
+  # deploy:
+  #   name: Deploy Gigalixir
+  #   needs: [lint, check_format, security, test]
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v2
+  #       with:
+  #         ref: main # Checkout out master instead of the latest commit
+  #         fetch-depth: 0 # Checkout the whole branch
+  #     - uses: actions/setup-python@v2
+  #       with:
+  #         python-version: 3.8.1
+  #     - uses: mhanberg/gigalixir-action@v0.6.2
+  #       with:
+  #         GIGALIXIR_USERNAME: ${{ secrets.GIGALIXIR_EMAIL }}
+  #         GIGALIXIR_PASSWORD: ${{ secrets.GIGALIXIR_PASSWORD }}
+  #         GIGALIXIR_APP: ${{ secrets.GIGALIXIR_APP_NAME }}
+  #         GIGALIXIR_CLEAN: true
+  #         SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+  #         MIGRATIONS: false # defaults to true
