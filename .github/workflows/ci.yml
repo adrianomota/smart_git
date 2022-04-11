@@ -6,10 +6,6 @@ on:
   #   branches: [dev, main, master]
   pull_request:
     types: [opened, synchronize]
-    strategy:
-      matrix:
-        elixir: [1.13]
-        otp: [24.3]
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -24,8 +20,8 @@ jobs:
       - uses: actions/checkout@v2
       - uses: erlef/setup-elixir@885971a72ed1f9240973bd92ab57af8c1aa68f24
         with:
-          otp-version: ${{ matrix.elixir }}
-          elixir-version: ${{ matrix.otp }}
+          otp-version: [1.13]
+          elixir-version: [24.3]
       - uses: actions/cache@v2
         env:
           cache-name: cache-elixir-deps
@@ -52,8 +48,8 @@ jobs:
       - uses: actions/checkout@v2
       - uses: erlef/setup-elixir@885971a72ed1f9240973bd92ab57af8c1aa68f24
         with:
-          otp-version: ${{ matrix.elixir }}
-          elixir-version: ${{ matrix.otp }}
+          otp-version: [1.13]
+          elixir-version: [24.3]
       - uses: actions/cache@v2
         env:
           cache-name: cache-elixir-deps
@@ -80,8 +76,8 @@ jobs:
       - uses: actions/checkout@v2
       - uses: erlef/setup-elixir@885971a72ed1f9240973bd92ab57af8c1aa68f24
         with:
-          otp-version: ${{ matrix.elixir }}
-          elixir-version: ${{ matrix.otp }}
+          otp-version: [1.13]
+          elixir-version: [24.3]
       - uses: actions/cache@v2
         env:
           cache-name: cache-elixir-deps
@@ -108,8 +104,8 @@ jobs:
       - uses: actions/checkout@v2
       - uses: erlef/setup-elixir@885971a72ed1f9240973bd92ab57af8c1aa68f24
         with:
-          otp-version: ${{ matrix.elixir }}
-          elixir-version: ${{ matrix.otp }}
+          otp-version: [1.13]
+          elixir-version: [24.3]
       - uses: actions/cache@v2
         env:
           cache-name: cache-elixir-deps
